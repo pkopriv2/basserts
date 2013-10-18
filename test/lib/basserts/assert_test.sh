@@ -78,6 +78,203 @@ test_assert_not_equals() {
 	[[ $? = 0 ]] || exit 1
 }
 
+test_assert_string_equals_fail_no_message() {
+	declare local out
+
+	out=$( assert_string_equals "1*" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals "*1" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals "*1*" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals "1*" "1 is only the first part" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals "*123*" "1 is not a match.  but 123 is" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals " 1 " "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals "1" " 1 " 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals "" " " 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_equals "abc" "def" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	local expected_msg="String \[def\] did not equal \[abc\]"
+	[[ $out == *$expected_msg*  ]] || exit 1
+}
+
+test_assert_string_equals_fail_with_message() {
+	declare local out
+
+	out=$( assert_string_equals "abc" "def" "msg" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	local expected_msg="msg"
+	[[ $out == *$expected_msg*  ]] || exit 1
+}
+
+test_assert_string_equals() {
+	assert_string_equals "" ""
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_equals " " " "
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_equals "1" "1"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_equals "1*" "1*"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_equals "*1" "*1"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_equals "*1*" "*1*"
+	[[ $? = 0 ]] || exit 1
+}
+
+test_assert_string_starts_with_fail_no_message() {
+	declare local out
+
+	out=$( assert_string_starts_with "1*" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_starts_with "*1" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_starts_with "*1*" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_starts_with "1*" "1 is only the first part" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_starts_with "*123*" "1 is not a match.  but 123 is" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_starts_with " 1 " "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_starts_with "1" " 1 " 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_starts_with "abc" "def" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	local expected_msg="String \[def\] did not start with \[abc\]"
+	[[ $out == *$expected_msg*  ]] || exit 1
+}
+
+test_assert_string_starts_with_fail_with_message() {
+	declare local out
+
+	out=$( assert_string_starts_with "abc" "def" "msg" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	local expected_msg="msg"
+	[[ $out == *$expected_msg*  ]] || exit 1
+}
+
+test_assert_string_starts_with() {
+	assert_string_starts_with "" ""
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with "" "123"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with " " " "
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with "1" "123"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with "1*" "1*23"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with "*1" "*123"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with "*1*" "*1*23"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with "1" "123"  
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_starts_with " " " 123"  
+	[[ $? = 0 ]] || exit 1
+}
+
+test_assert_string_ends_with_fail_no_message() {
+	declare local out
+
+	out=$( assert_string_ends_with "1*" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_ends_with "*1" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_ends_with "*1*" "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_ends_with "*part" "1 is only the first part" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_ends_with "*123*" "1 is not a match.  but 123 is" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_ends_with " 1 " "1" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_ends_with "1" " 1 " 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	out=$( assert_string_ends_with "abc" "def" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	local expected_msg="String \[def\] did not end with \[abc\]"
+	[[ $out == *$expected_msg*  ]] || exit 1
+}
+
+test_assert_string_ends_with_fail_with_message() {
+	declare local out
+
+	out=$( assert_string_ends_with "abc" "def" "msg" 2>&1 )
+	[[ $? != 0 ]] || exit 1
+
+	local expected_msg="msg"
+	[[ $out == *$expected_msg*  ]] || exit 1
+}
+
+test_assert_string_ends_with() {
+	assert_string_ends_with "" ""
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_ends_with "" "123"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_ends_with " " "123 "
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_ends_with "3" "123"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_ends_with "3*" "123*"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_ends_with "*3" "12*3"
+	[[ $? = 0 ]] || exit 1
+
+	assert_string_ends_with "*3*" "12*3*"
+	[[ $? = 0 ]] || exit 1
+}
 
 test_assert_matches_fail() {
 	declare local out

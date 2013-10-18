@@ -39,6 +39,42 @@ assert_not_equals() {
 		builtin test $1 != $2
 }
 
+assert_string_equals() {
+	if (( $# < 2 )) 
+	then
+		fail "usage: assert_string_equals <expected> <actual> [<message>]"
+	fi
+
+	[[ "$2" == "$1" ]]
+
+	assert_equals 0 $? \
+		"${3:-"String [$2] did not equal [$1]"}"
+}
+
+assert_string_starts_with() {
+	if (( $# < 2 )) 
+	then
+		fail "usage: assert_string_starts_with <expected> <actual> [<message>]"
+	fi
+
+	[[ "$2" == "$1"* ]]
+
+	assert_equals 0 $? \
+		"${3:-"String [$2] did not start with [$1]"}"
+}
+
+assert_string_ends_with() {
+	if (( $# < 2 )) 
+	then
+		fail "usage: assert_string_ends_with <expected> <actual> [<message>]"
+	fi
+
+	[[ "$2" == *"$1" ]]
+
+	assert_equals 0 $? \
+		"${3:-"String [$2] did not end with [$1]"}"
+}
+
 assert_matches() {
 	if (( $# < 2 )) 
 	then

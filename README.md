@@ -25,3 +25,6 @@ This is the ONLY file in basherts.  It contains the following methods:
 * assert\_false
 * assert\_contains
 * assert\_empty
+* assert\_string\_equals
+* assert\_string\_starts\_with
+* assert\_string\_ends\_with
