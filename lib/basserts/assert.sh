@@ -45,11 +45,10 @@ assert_string_equals() {
 		fail "usage: assert_string_equals <expected> <actual> [<message>]"
 	fi
 
-	string=$1; shift
-	[[ "$*" == "$string" ]]
+	[[ "$2" == "$1" ]]
 
 	assert_equals 0 $? \
-		"${3:-"String [$*] did not equal [$string]"}"
+		"${3:-"String [$2] did not equal [$1]"}"
 }
 
 assert_string_starts_with() {
@@ -58,11 +57,10 @@ assert_string_starts_with() {
 		fail "usage: assert_string_starts_with <expected> <actual> [<message>]"
 	fi
 
-	string=$1; shift
-	[[ "$*" == "$string"* ]]
+	[[ "$2" == "$1"* ]]
 
 	assert_equals 0 $? \
-		"${3:-"String [$*] did not start with [$string]"}"
+		"${3:-"String [$2] did not start with [$1]"}"
 }
 
 assert_string_ends_with() {
@@ -71,11 +69,10 @@ assert_string_ends_with() {
 		fail "usage: assert_string_ends_with <expected> <actual> [<message>]"
 	fi
 
-	string=$1; shift
-	[[ "$*" == *"$string" ]]
+	[[ "$2" == *"$1" ]]
 
 	assert_equals 0 $? \
-		"${3:-"String [$*] did not end with [$string]"}"
+		"${3:-"String [$2] did not end with [$1]"}"
 }
 
 assert_matches() {
